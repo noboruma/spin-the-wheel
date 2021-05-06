@@ -10,5 +10,5 @@ cargo install spin-the-wheel
 
 ## How to use
 ```
-cargo Alice Ben "Charles D" "Charles E"
+spin-the-wheel Alice Ben "Charles D" "Charles E"
 ```
