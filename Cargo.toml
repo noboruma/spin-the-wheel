@@ -1,0 +1,15 @@
+[package]
+name = "spin-the-wheel"
+version = "0.0.1"
+authors = ["Thomas Legris <legris.thomas@gmail.com>"]
+edition = "2018"
+license = "Apache-2.0"
+description = "A tool to spin the wheel and select a winner from a set of input"
+homepage = "https://github.com/noboruma/spin-the-wheel"
+repository = "https://github.com/noboruma/spin-the-wheel"
+keywords = ["cli", "wheel", "spin", "win", "select", "lottery"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+crossterm = "0.18"
+rand = "0.8.3"
