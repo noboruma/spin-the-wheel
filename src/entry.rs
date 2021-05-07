@@ -28,6 +28,7 @@ impl Entry {
             stdout(),
             SetForegroundColor(self.color),
             SetBackgroundColor(Color::Black),
+            Print(" "),
             Print(self.name.clone()),
             ResetColor,
         ).map_err(|_| Error::Display)?;
@@ -50,6 +51,7 @@ pub fn print_selected_entry(entry: &Entry, i: usize, total: usize) -> Result<()>
         MoveToPreviousLine(total as u16),
         MoveDown((i % total) as u16),
         SetForegroundColor(entry.color),
+        Print(">"),
         SetAttribute(Attribute::Underlined),
         Print(&entry.name),
         RestorePosition,
@@ -64,6 +66,7 @@ pub fn print_clear_entry(entry: &Entry, i: usize, total: usize) -> Result<()> {
         MoveToPreviousLine(total as u16),
         MoveDown((i % total) as u16),
         SetForegroundColor(entry.color),
+        Print(" "),
         SetAttribute(Attribute::NoUnderline),
         Print(&entry.name),
         RestorePosition,
