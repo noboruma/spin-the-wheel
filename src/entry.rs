@@ -5,7 +5,8 @@ use crossterm::{cursor::{MoveDown, MoveToPreviousLine, RestorePosition, SavePosi
 #[derive(Debug)]
 pub enum Error {
     Display,
-    Logic
+    Logic,
+    Args,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

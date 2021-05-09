@@ -1,9 +1,10 @@
 mod entry;
 
-use crate::entry::*;
+use crate::entry::{*, Error, print_entries};
 
-use std::{env, io::{stdout, Write}, iter::{Cycle, Enumerate}, thread::sleep, time::Duration};
+use std::{io::{stdout, Write}, iter::{Cycle, Enumerate}, thread::sleep, time::Duration};
 use rand::Rng;
+use clap::{App, load_yaml};
 
 use crossterm::{cursor::{Hide, Show}, execute, style::Color};
 
@@ -57,12 +58,12 @@ fn select_entry(it: &mut Cycle::<Enumerate::<std::slice::Iter<Entry>>>, entries:
     Ok(())
 }
 
-fn create_entries() -> Vec<Entry> {
+fn create_entries(args: Vec<String>) -> Vec<Entry> {
     // Assign a color to each entry
     let mut color = COLORS.iter().cycle();
 
-    return env::args().skip(1).map(|x|
-        Entry::new(x, color.next().unwrap().clone())
+    return args.iter().map(|x|
+        Entry::new(x.clone(), color.next().unwrap().clone())
     ).collect();
 }
 
@@ -87,16 +88,35 @@ impl Drop for CursorVisibility {
     }
 }
 
+fn get_args() -> Result<(u64, Vec<String>)> {
+    let yaml = load_yaml!("cli.yaml");
+    let matches = App::from(yaml).get_matches();
+
+    let args_input : Vec<String> = match matches.values_of_t("ENTRIES") {
+        Ok(inputs) => Ok(inputs),
+        Err(_) => Err(Error::Args)
+    }?;
+
+    let total_time_sec : u64 = match matches.value_of("spin-time") {
+        Some(time) => Ok(time.parse::<u64>().unwrap_or(6)),
+        None => Err(Error::Args),
+    }?;
+
+    return Ok((total_time_sec, args_input));
+}
+
 fn main() -> Result<()> {
 
-    let entries = create_entries();
+    let (total_time_sec, args_input) = get_args()?;
+    let entries = create_entries(args_input);
+    let total_time_ns : u64 = total_time_sec * 1_000_000_000;
+
     let mut selected_entry_it = entries.iter().enumerate().cycle();
     let mut rng = rand::thread_rng();
-    let _cursor  = CursorVisibility::new();
 
+    let _cursor  = CursorVisibility::new();
     print_entries(&entries)?;
 
-    let total_time_ns : u64 = 6_000_000_000;
     let winner : u64 = rng.gen_range(0..entries.len()) as u64;
 
     spin_for!(total_time_ns, QUICK_MOTION_NS, 2, select_entry(&mut selected_entry_it, &entries)?);

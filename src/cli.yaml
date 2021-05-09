@@ -1,0 +1,17 @@
+name: spin-the-wheel
+version: "0.3"
+author: Thomas L. <legris.thomas@gmail.com>
+about: Spin the wheel to select someone
+args:
+  - spin-time:
+      short: s
+      long: spin-time
+      about: Set the time spinning time in second
+      takes_value: true
+      default_value: "6"
+  - ENTRIES:
+      about: Entries attached to the spinning wheel
+      required: true
+      multiple: true
+      help: You must at least provide 2 entries
+      min_values: 2

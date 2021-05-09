@@ -1,6 +1,6 @@
 [package]
 name = "spin-the-wheel"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["Thomas Legris <legris.thomas@gmail.com>"]
 edition = "2018"
 license = "Apache-2.0"
@@ -13,3 +13,4 @@ categories = ["command-line-utilities"]
 [dependencies]
 crossterm = "0.18"
 rand = "0.8.3"
+clap = { version = "3.0.0-beta.2", features = ["yaml"] }
